@@ -1,6 +1,3 @@
-[submodule "riscv-gcc"]
-	path = riscv-gcc
-	url = ../riscv-gcc.git
 [submodule "riscv-glibc"]
 	path = riscv-glibc
 	url = ../riscv-glibc.git
