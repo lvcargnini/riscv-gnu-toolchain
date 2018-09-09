@@ -486,15 +486,22 @@ stamps/build-newlib-nano: $(srcdir)/riscv-newlib stamps/build-gcc-newlib-stage1
 stamps/merge-newlib-nano: stamps/build-newlib-nano stamps/build-newlib
 # Copy nano library files into newlib install dir.
 	set -e; \
-        for ml in `$(INSTALL_DIR)/bin/$(NEWLIB_TUPLE)-gcc --print-multi-lib`; \
+	bnl="$(builddir)/install-newlib-nano/$(NEWLIB_TUPLE)/lib"; \
+	inl="$(INSTALL_DIR)/$(NEWLIB_TUPLE)/lib"; \
+	for bnlc in `find $${bnl} -name libc.a`; \
 	do \
-	    mld=`echo $${ml} | sed -e 's/;.*$$//'`; \
-	    cp $(builddir)/install-newlib-nano/$(NEWLIB_TUPLE)/lib/$${mld}/libc.a \
-		$(INSTALL_DIR)/$(NEWLIB_TUPLE)/lib/$${mld}/libc_nano.a; \
-	    cp $(builddir)/install-newlib-nano/$(NEWLIB_TUPLE)/lib/$${mld}/libg.a \
-		$(INSTALL_DIR)/$(NEWLIB_TUPLE)/lib/$${mld}/libg_nano.a; \
-	    cp $(builddir)/install-newlib-nano/$(NEWLIB_TUPLE)/lib/$${mld}/libgloss.a\
-		$(INSTALL_DIR)/$(NEWLIB_TUPLE)/lib/$${mld}/libgloss_nano.a; \
+		inlc=`echo $${bnlc} | sed -e "s:$${bnl}::" | sed -e "s:libc\.a:libc_nano.a:g"`; \
+		cp $${bnlc} $${inl}$${inlc}; \
+	done; \
+	for bnlg in `find $${bnl} -name libg.a`; \
+	do \
+		inlg=`echo $${bnlg} | sed -e "s:$${bnl}::" | sed -e "s:libg\.a:libg_nano.a:g"`; \
+		cp $${bnlg} $${inl}$${inlg}; \
+	done; \
+	for bnls in `find $${bnl} -name libgloss.a`; \
+	do \
+		inls=`echo $${bnls} | sed -e "s:$${bnl}::" | sed -e "s:libgloss\.a:libgloss_nano.a:g"`; \
+		cp $${bnls} $${inl}$${inls}; \
 	done
 # Copy nano header files into newlib install dir.
 	mkdir -p $(INSTALL_DIR)/$(NEWLIB_TUPLE)/include/newlib-nano; \
