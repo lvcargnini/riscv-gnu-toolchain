@@ -16,6 +16,3 @@
 [submodule "riscv-binutils"]
 	path = riscv-binutils
 	url = ../riscv-binutils-gdb.git
-[submodule "riscv-qemu"]
-	path = riscv-qemu
-	url = ../riscv-qemu.git
